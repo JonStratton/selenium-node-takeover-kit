@@ -1,8 +1,13 @@
+#!/usr/bin/env python
+# https://github.com/JonStratton/selenium-node-takeover-kit/blob/master/examples/selenium_node_upload.py
+#
+# You can upload a file onto a remote selenium node by changing the download folder and clicking a download link.
+# Small files can be encoded and used within url inline html. Larger files should be pulled remotely.
+# Limits are 1. the context of the process on the selenium node, 2. it cannot overwrite files, and 3. it doesnt seem to be able to make dot files.
+
 import base64, getopt, sys, os
 from selenium import webdriver
 from selenium.webdriver.remote.file_detector import UselessFileDetector
-# Cannot 1. Overwrite a file. 2. Upload a dotfile. 
-# Can create a directory
 
 def get_driver(url, remote_path):
     # To prevent download dialog

