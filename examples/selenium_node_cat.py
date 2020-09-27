@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # https://github.com/JonStratton/selenium-node-takeover-kit/blob/master/examples/selenium_node_cat.py
 # 
 # A quick and light version of selenium_node_download.py that doesnt handle binary files.
@@ -8,9 +8,9 @@ import sys, getopt
 from selenium import webdriver
 
 hub_url, remote_file = None, None
-myopts, args = getopt.getopt(sys.argv[1:],':u:r:')
+myopts, args = getopt.getopt(sys.argv[1:],':h:r:')
 for o, a in myopts:
-    if o == '-u':
+    if o == '-h':
         hub_url = a
     elif o == '-r':
         remote_file = a

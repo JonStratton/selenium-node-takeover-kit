@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # https://github.com/JonStratton/selenium-node-takeover-kit/blob/master/examples/selenium_node_iterate_fs.py
 # 
 # Just a tweak to the FileDetector sent_keys so we can check a bunch of files with one connection.
