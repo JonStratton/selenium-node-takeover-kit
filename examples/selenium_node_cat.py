@@ -7,19 +7,20 @@
 import sys, getopt
 from selenium import webdriver
 
-hub_url, remote_file = None, None
-myopts, args = getopt.getopt(sys.argv[1:],':h:r:')
+hub_url, remote_file, browser = None, None, 'firefox'
+myopts, args = getopt.getopt(sys.argv[1:],':h:r:b:')
 for o, a in myopts:
     if o == '-h':
         hub_url = a
     elif o == '-r':
         remote_file = a
+    elif o == '-b':
+        browser = a
 
 # Nothing special about the driver here. Probably would work on any browser
-options = webdriver.FirefoxOptions()
 driver = webdriver.Remote(
    command_executor=hub_url,
-   desired_capabilities=options.to_capabilities()
+   desired_capabilities={'browserName': browser}
    )
 
 # Just get the local file and print it.

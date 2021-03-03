@@ -16,6 +16,9 @@ OptionParser.new do |opts|
   opts.on('-rFILE', '--remoteFILE', 'The destination of the uploaded files.') do |r|
     options[:remote] = r
   end
+  opts.on('-bBROWSER', '--browserBROWSER', 'The Browser to use.') do |r|
+    options[:browser] = r
+  end
   opts.on('--help', 'Prints this help') do
     puts opts
     exit
@@ -24,14 +27,12 @@ end.parse!
 
 hub_url = options[:hub]
 remote_file = options[:remote]
+browser = options[:browser] ? options[:browser] : 'firefox'
 
 # Nothing special about the driver here. Probably would work on any browser
-caps = {                       
-    :browserName => 'firefox'
-}  
-driver = Selenium::WebDriver.for :remote, :url => hub_url, :desired_capabilities => caps
+driver = Selenium::WebDriver.for :remote, :url => hub_url, :desired_capabilities => { :browserName => browser }
 
-# Just get the local file and print it.
+# Just get the local file and print it
 driver.get('file://%s' % [remote_file])
 print(driver.page_source)
 driver.quit

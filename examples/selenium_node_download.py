@@ -29,7 +29,7 @@ def get_file_contents(driver, remote_file):
     return decoded_contents
 
 if __name__ == '__main__':
-    hub_url, remote_file, local_file = None, None, None
+    hub_url, remote_file, local_file, browser = None, None, None, 'firefox'
     myopts, args = getopt.getopt(sys.argv[1:],':h:r:l:')
     for o, a in myopts:
         if o == '-h':
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             local_file = a
 
     # Probably any browser would work here
-    driver = webdriver.Remote( command_executor=hub_url, desired_capabilities={'browserName': 'firefox'} )
+    driver = webdriver.Remote( command_executor=hub_url, desired_capabilities={'browserName': browser} )
     driver.file_detector = UselessFileDetector()
 
     try:

@@ -60,7 +60,7 @@ end
 # Inline html with an inline download file link
 data_url = 'data:text/html;charset=utf-8,<html><a id=f href="%s" download="%s">f</a></html>' % [url_file, File::basename(remote_file)]
 
-# Configure browser profile to use custom download location and not prompt to save files for mime type. This should probably be turned off by default...
+# Configure browser profile to use custom download location and not prompt to save files for mime type. This should probably be turned off by default.
 profile = Selenium::WebDriver::Firefox::Profile.new
 profile['browser.download.folderList'] = 2
 profile['browser.download.manager.showWhenStarting'] = false
