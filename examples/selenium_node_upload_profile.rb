@@ -47,7 +47,7 @@ stringio.rewind
 encoded_profile = Base64.strict_encode64(stringio.sysread)
 
 # Create session with our new profile
-newSession = {:desiredCapabilities => {:browserName => "firefox", :firefox_profile => encoded_profile}, :capabilities => {:firstMatch => [{:browserName => "firefox", :"moz:firefoxOptions" => encoded_profile}]}}
+newSession = {:desiredCapabilities => {:browserName => "firefox", :firefox_profile => encoded_profile}}
 
 # Start session with encoded_profile and save session id for cleanup.
 uri = URI.parse("%s/session" % [hub_url])
