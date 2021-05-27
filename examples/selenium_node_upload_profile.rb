@@ -1,4 +1,12 @@
 #!/usr/bin/env ruby
+# Exploit Title: Selenium Node Remote File Upload (Firefox/geckodriver)
+# Date: 2021-05-27
+# Exploit Author: Jon Stratton
+# Vendor Homepage: https://www.selenium.dev/
+# Software Link: https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+# Version: 3.141.59
+# Tested on: Selenium Server 3.141.59, webdriver, geckodriver 
+# 
 # https://github.com/JonStratton/selenium-node-takeover-kit/blob/master/examples/selenium_node_upload_profile.rb
 #
 # Selenium sends profile information in a base64 encoded zip file. When it unzips the profile, it does it in an unsafe manner (allows overwrites,

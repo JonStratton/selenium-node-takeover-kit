@@ -1,4 +1,12 @@
 #!/usr/bin/env ruby
+# Exploit Title: Selenium Node Remote Code Execution (Firefox/geckodriver)
+# Date: 2021-05-27
+# Exploit Author: Jon Stratton
+# Vendor Homepage: https://www.selenium.dev/
+# Software Link: https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+# Version: 3.141.59
+# Tested on: Selenium Server 3.141.59, webdriver, geckodriver 
+#
 # https://github.com/JonStratton/selenium-node-takeover-kit/blob/master/examples/selenium_node_rce.rb
 #
 # When Selenium runs, it creates a custom profile (in /tmp/ for Linux) on the Node. This profile then gets overwritten by a possible overlay that is sent in a base64 encoded zip file when a Selenium session is started.
