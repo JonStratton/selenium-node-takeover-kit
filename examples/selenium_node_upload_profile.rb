@@ -60,10 +60,10 @@ newSession = {:desiredCapabilities => {:browserName => "firefox", :firefox_profi
 # Start session with encoded_profile and save session id for cleanup.
 uri = URI.parse("%s/session" % [hub_url])
 http = Net::HTTP.new(uri.host, uri.port)
-request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
+request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json; charset=utf-8')
 request.body = JSON.generate(newSession)
 response = http.request(request)
-sessionId = JSON.parse(response.body)["value"]["sessionId"]
+sessionId = JSON.parse(response.body)["value"]["sessionId"] ? JSON.parse(response.body)["value"]["sessionId"] : JSON.parse(response.body)["sessionId"]
 
 # End session 
 sessionUri = URI.parse("%s/session/%s" % [hub_url, sessionId])

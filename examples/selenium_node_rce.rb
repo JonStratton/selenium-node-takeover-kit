@@ -58,15 +58,15 @@ http = Net::HTTP.new(uri.host, uri.port)
 
 # Start session with encoded_profile and save session id for cleanup.
 uri = URI.parse("%s/session" % [hub_url])
-request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
+request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json; charset=utf-8')
 request.body = JSON.generate(newSession)
 response = http.request(request)
-sessionId = JSON.parse(response.body)["value"]["sessionId"]
+sessionId = JSON.parse(response.body)["value"]["sessionId"] ? JSON.parse(response.body)["value"]["sessionId"] : JSON.parse(response.body)["sessionId"]
 
 # URL. 
 data_url = "data:application/sh;charset=utf-16le;base64,%s" % [Base64.encode64(payload)]
 uri = URI.parse("%s/session/%s/url" % [hub_url, sessionId])
-request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
+request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json; charset=utf-8')
 request.body = JSON.generate(:url => data_url)
 response = http.request(request)
 
