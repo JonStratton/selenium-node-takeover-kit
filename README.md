@@ -20,7 +20,7 @@ Like the Node Download scripts, but not bothering with processing the file in Ja
 - [examples/selenium_node_iterate_fs.py](examples/selenium_node_iterate_fs.py)
 
 ### Remote Code Execution
-Firefox only. Uses a Firefox Profile (which is just a base64 encoded zip file embedded in an Selenium API hit) create a custom handler (“application/sh” to /bin/sh in this case). In then base64 encodes some shell commands and uses inline “data:” to pass in commands associated with “application/sh”. Firefox will then create a temp file with the commands and execute it with sh.
+Firefox only. Uses a Firefox Profile (which is just a base64 encoded zip file embedded in an Selenium API hit) to create a custom handler (“application/sh” to /bin/sh in this case). It then base64 encodes some shell commands and uses inline “data:” to pass in commands associated with “application/sh”. Firefox will then create a temp file with the commands and execute it with sh.
 - [examples/selenium_node_rce.rb](examples/selenium_node_rce.rb)
 
 ### Uploading a file to a Remote node.
