@@ -1,4 +1,6 @@
 ## Metasploit Exploits
+This project has moved. To get the latest version, pull from https://codeberg.org/JonStratton/selenium-node-takeover-kit
+
 This combines some of the examples below to upload files to, download files from, and execute code on a Selenium node (via the “COMMAND_TYPE” param). RCE currently only works on Linux. To install, copy this to "~/.msf4/modules/exploits/multi/http/" or whatever. 
 - [metasploit_exploits/selenium_node_takeover_kit.rb](metasploit_exploits/selenium_node_takeover_kit.rb)
 
